@@ -3,7 +3,19 @@
 one:
   name: Mom
   email: mom@example.com
+  group: one
 
 two:
   name: Bob's Plumbing
   email: bob@bobsplumbing.com
+  group: one
+
+three:
+  name: Dad
+  email: dad@example.com
+  group: two
+
+four:
+  name: Grandma
+  email: grandma@example.com
+  group: two

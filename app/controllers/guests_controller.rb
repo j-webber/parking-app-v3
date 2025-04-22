@@ -3,7 +3,7 @@ class GuestsController < ApplicationController
 
   # GET /guests or /guests.json
   def index
-    @guests = Guest.all
+    @guests = Current.user.group.guests.all
   end
 
   # GET /guests/1 or /guests/1.json
@@ -21,7 +21,7 @@ class GuestsController < ApplicationController
 
   # POST /guests or /guests.json
   def create
-    @guest = Guest.new(guest_params)
+    @guest = Current.user.group.guests.new(guest_params)
 
     respond_to do |format|
       if @guest.save

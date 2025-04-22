@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_22_190131) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_22_202958) do
   create_table "groups", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -24,6 +24,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_22_190131) do
     t.datetime "updated_at", null: false
     t.integer "group_id", null: false
     t.index ["group_id"], name: "index_guests_on_group_id"
+  end
+
+  create_table "parking_passes", force: :cascade do |t|
+    t.datetime "expiration_date"
+    t.string "qr_code"
+    t.integer "valid_day"
+    t.integer "guest_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["guest_id"], name: "index_parking_passes_on_guest_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -46,6 +56,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_22_190131) do
   end
 
   add_foreign_key "guests", "groups"
+  add_foreign_key "parking_passes", "guests"
   add_foreign_key "sessions", "users"
   add_foreign_key "users", "groups"
 end

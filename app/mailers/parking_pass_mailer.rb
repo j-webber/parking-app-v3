@@ -1,5 +1,5 @@
 class ParkingPassMailer < ApplicationMailer
-  default from: "noreply@joewebber.me"
+  default from: "jgwebber1@gmail.com"
 
   def send_pass
     @parking_pass = params[:parking_pass]

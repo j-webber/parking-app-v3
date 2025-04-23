@@ -10,19 +10,23 @@
     <%= link_to "New guest", new_guest_path, class: "rounded-md px-3.5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white block font-medium" %>
   </div>
 
-  <div id="guests" class="min-w-full divide-y divide-gray-200 space-y-5">
+  <div id="guests" class="min-w-full divide-y divide-gray-200 space-y-5 mt-5">
     <% if @guests.any? %>
       <% @guests.each do |guest| %>
         <div class="flex flex-col sm:flex-row justify-between items-center pb-5 sm:pb-0">
           <%= render guest %>
+          <div>
+            <% if guest.parking_passes.last&.active? %>
+            <%= link_to "Active Pass", edit_guest_parking_pass_path(guest.id, guest.parking_passes.last), class: "bg-green-400 text-green-50 font-semibold rounded-full px-4 py-2 hover:bg-green-300"%>
+            <% elsif guest.parking_passes.last %>
+            <%= link_to "Pass Expired", edit_guest_parking_pass_path(guest.id, guest.parking_passes.last), class: "bg-red-400 text-red-50 font-semibold rounded-full px-4 py-2 hover:bg-red-300"%>
+            <% end %>
+          </div>
           <div class="w-full sm:w-auto flex flex-col sm:flex-row space-x-2 space-y-2">
-            <% if guest.parking_passes.last %>
-            <%= link_to "Edit Parking Pass", edit_guest_parking_pass_path(guest.id, guest.parking_passes.last), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <% else %>
+            <% if !guest.parking_passes.last %>
             <%= link_to "Create Parking Pass", new_guest_parking_pass_path(guest.id, guest.parking_passes.last), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
             <% end %>
             <%= link_to "Edit Guest", edit_guest_path(guest), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-            <%= button_to "Delete Guest", guest, method: :delete, class: "w-full sm:w-auto rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
           </div>
         </div>
       <% end %>

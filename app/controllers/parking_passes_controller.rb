@@ -73,7 +73,6 @@ class ParkingPassesController < ApplicationController
     end
 
     def generate_parking_pass(parking_pass)
-      puts parking_pass
       RQRCode::QRCode.new(guest_parking_pass_url(parking_pass.guest_id, parking_pass.id)).as_svg
     end
 end

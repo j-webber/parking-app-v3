@@ -1,4 +1,5 @@
 class ParkingPassesController < ApplicationController
+  allow_unauthenticated_access only: %i[ show ]
   before_action :set_parking_pass, only: %i[ show edit update destroy ]
   before_action :set_guest, only: %i[ new create edit update ]
 
@@ -28,7 +29,7 @@ class ParkingPassesController < ApplicationController
         qrcode = generate_parking_pass(@parking_pass)
         @parking_pass.update(qr_code: qrcode)
         ParkingPassMailer.with(parking_pass: @parking_pass, guest: @guest).send_pass.deliver_later
-        redirect_to guests_path, notice: "Parking pass was successfully created."
+        redirect_to edit_guest_parking_pass_path(@guest.id, @parking_pass), notice: "Parking pass was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -74,6 +75,6 @@ class ParkingPassesController < ApplicationController
     end
 
     def generate_parking_pass(parking_pass)
-      RQRCode::QRCode.new(guest_parking_pass_url(parking_pass.guest_id, parking_pass.id)).as_svg
+      RQRCode::QRCode.new(guest_parking_pass_url(parking_pass.guest_id, parking_pass.id)).as_svg(viewbox: true)
     end
 end

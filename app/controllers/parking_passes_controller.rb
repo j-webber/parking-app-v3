@@ -1,6 +1,6 @@
 class ParkingPassesController < ApplicationController
   before_action :set_parking_pass, only: %i[ show edit update destroy ]
-  before_action :set_guest, only: %i[ new create edit ]
+  before_action :set_guest, only: %i[ new create edit update ]
 
   # GET /parking_passes or /parking_passes.json
   def index
@@ -27,7 +27,7 @@ class ParkingPassesController < ApplicationController
       if @parking_pass.save
         qrcode = generate_parking_pass(@parking_pass)
         @parking_pass.update(qr_code: qrcode)
-        # ParkingPassMailer.with(parking_pass: @parking_pass, guest: @guest).send_pass.deliver_later
+        ParkingPassMailer.with(parking_pass: @parking_pass, guest: @guest).send_pass.deliver_later
         redirect_to guests_path, notice: "Parking pass was successfully created."
       else
         render :new, status: :unprocessable_entity
@@ -38,6 +38,7 @@ class ParkingPassesController < ApplicationController
   def update
     respond_to do |format|
       if @parking_pass.update(parking_pass_params)
+        ParkingPassMailer.with(parking_pass: @parking_pass, guest: @guest).send_pass.deliver_later
         format.html { redirect_to guests_path, notice: "Parking pass was successfully updated." }
         format.json { render :show, status: :ok, location: @parking_pass }
       else
@@ -69,7 +70,7 @@ class ParkingPassesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def parking_pass_params
-      params.expect(parking_pass: [ :expiration_date, :qr_code, :valid_day, :guest_id ])
+      params.expect(parking_pass: [ :expiration_date, :qr_code, :valid_day, :guest_id, :valid_day_ids ])
     end
 
     def generate_parking_pass(parking_pass)

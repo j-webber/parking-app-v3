@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_22_202958) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_23_023234) do
   create_table "groups", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -36,6 +36,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_22_202958) do
     t.index ["guest_id"], name: "index_parking_passes_on_guest_id"
   end
 
+  create_table "parking_passes_valid_days", id: false, force: :cascade do |t|
+    t.integer "parking_pass_id"
+    t.integer "valid_day_id"
+    t.index ["parking_pass_id"], name: "index_parking_passes_valid_days_on_parking_pass_id"
+    t.index ["valid_day_id"], name: "index_parking_passes_valid_days_on_valid_day_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -53,6 +60,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_22_202958) do
     t.integer "group_id", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["group_id"], name: "index_users_on_group_id"
+  end
+
+  create_table "valid_days", force: :cascade do |t|
+    t.string "name"
+    t.integer "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "guests", "groups"

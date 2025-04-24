@@ -64,4 +64,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "rqrcode", "~> 2.0"
+gem "rqrcode", "~> 3.0"
